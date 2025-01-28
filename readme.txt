@@ -1,2 +1,2 @@
-Для запуска требуется установленный node.js https://nodejs.org/en
-После установки запусть дискорд, а потом файл start.bat
+It requires node.js installed https://nodejs.org/en to run.
+After installation, run discord and then start.bat file.
