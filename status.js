@@ -1,83 +1,67 @@
-//Подключаем библиотеку и инициализируем клиент
+// Import the library and initialize the client
 const RPC = require('discord-rpc');
 const client = new RPC.Client({ transport: 'ipc' });
 
+console.log("Custom Rich Presence by SNBLST v 1.0")
 
-//Анимация иконки (первая строчка, каждый элемент массива - кадр)
-const animationFrames = [
-    'Downloading server data 🌍',
-    'Downloading server data 🌎',
-    'Downloading server data 🌏',
-    'Downloading server data 🌎'
-];
+// Load the configuration (config.json)
+const config = require('./config.json'); 
+const clientId = config.clientId;
+console.log(`\n[${new Date().toLocaleTimeString()}] Configuration loaded successfully:`);
+console.log(`> Client ID: ${clientId}`);
 
-//Кадры анимации прогресс бара (вторая строчка, каждый элемент массива - кадр)
-const animationFrames2 = [
-    '[-----------------------]',
-    '[#----------------------]',
-    '[##---------------------]',
-    '[###--------------------]',
-    '[####-------------------]',
-    '[#####------------------]',
-    '[######-----------------]',
-    '[#######----------------]',
-    '[########---------------]',
-    '[#########--------------]',
-    '[##########-------------]',
-    '[###########------------]',
-    '[############-----------]',
-    '[#############----------]',
-    '[##############---------]',
-    '[###############--------]',
-    '[################-------]',
-    '[#################------]',
-    '[##################-----]',
-    '[###################----]',
-    '[####################---]',
-    '[#####################--]',
-    '[######################-]',
-    '[#######################]'
-];
+// Icon animation (first line, each array element is a frame, see config.json)
+const animationFrames = config.firstLineAnimationFrames;
+console.log(`> First line animation frames: ${animationFrames.length} frames loaded.`);
 
-//Глобальные переменные для хранения времени и индекса текущего кадра
-let index = 0; //Индекс первого кадра
-let index2 = 0; //Индекс второго кадра
-let timeStamp; //Дата запуска
+// Progress bar animation frames (second line, each array element is a frame, see config.json)
+const animationFrames2 = config.secondLineAnimationFrames;
+console.log(`> Second line animation frames: ${animationFrames2.length} frames loaded.`);
 
-// Функция для обновления статуса
+// Global variables to store time and current frame index
+let index = 0; // First frame index
+let index2 = 0; // Second frame index
+let timeStamp; // Start time
+
+// Function to update the status
 function updateStatus(frame, frame2) {
     client.setActivity({
-        details: `${frame}`,
-        state: `${frame2}`,  // Текст с названием приложения и анимацией
-        largeImageKey: 'https://media.tenor.com/LmKTgSCWvQwAAAAi/this-is-the-end.gif',  //Ссылка для большой иконки
-        startTimestamp: timeStamp  // Время начала активности
+        details: `${frame}`, //First animation
+        state: `${frame2}`, //Second animation
+        largeImageKey: config.imageURL,  // URL for the large icon (see config.json)
+        startTimestamp: timeStamp  // Start time of activity
     });
 }
 
+//Updating frame fucntion
 function updateFrame() {
-    const frame1 = animationFrames[index];  // Выбираем текущий символ для анимации
-    const frame2 = animationFrames2[index2];
-    updateStatus(frame1, frame2);  // Обновляем статус
+    const frame1 = animationFrames[index];  // Select the current frame for the animation
+    const frame2 = animationFrames2[index2]; // Select the current frame for the animation
+    updateStatus(frame1, frame2);  // Updating status
 
-    index = (index + 1) % animationFrames.length; //переключаем кадр первой анимации
-    index2 = (index2 + 1) % animationFrames2.length; //переключаем кадр второй анимации
+    index = (index + 1) % animationFrames.length; // Switch to the next frame of the first animation
+    index2 = (index2 + 1) % animationFrames2.length; // Switch to the next frame of the second animation
 }
 
-// Функция для анимации статуса
+//Interval setting function
 function animateStatus() {
-    timeStamp = Date.now();
-
+    timeStamp = Date.now(); // Getting current time for time stamp
+    console.log(`[${new Date().toLocaleTimeString()}] Updating status every ${config.interval} ms `);
     updateFrame();
     setInterval(() => {
         updateFrame();
-    }, 15000);  // Обновляем каждую половину секунды
+    }, config.interval);  //Setting interval(see config.json)
 }
 
-// Когда Discord RPC клиент готов
+//When the Discord RPC client is ready
 client.on('ready', () => {
-    console.log('Discord RPC was connected!');
+    console.log(`[${new Date().toLocaleTimeString()}] Discord RPC connected!`);
     animateStatus();
 });
 
-// Логинимся в Discord с использованием clientId
-client.login({ clientId: '1323442478615105668' }).catch(console.error);
+// Log in to Discord using clientId
+console.log(`\n[${new Date().toLocaleTimeString()}] Logging in to Discord RPC...`);
+client.login({ clientId }).catch((error) => { 
+    console.error(`[${new Date().toLocaleTimeString()}] Error during login:`);
+    console.error(`> ${error.message}`);
+});
