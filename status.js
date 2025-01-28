@@ -2,7 +2,7 @@
 const RPC = require('discord-rpc');
 const client = new RPC.Client({ transport: 'ipc' });
 
-console.log("Custom Rich Presence by SNBLST v 1.0")
+console.log("Custom Rich Presence by SNBLST v0.0.1")
 
 // Load the configuration (config.json)
 const config = require('./config.json'); 
