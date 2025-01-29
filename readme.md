@@ -2,22 +2,16 @@
 
 **Custom Rich Presence by SNBLST v0.0.1** is a tool for setting up custom animations and statuses in Discord.
 
----
-
 ## Features
 
 - **Custom Animations:** Display animated text for both the first and second lines of your status.
 - **Customizable Interval:** Update interval for animations can be set via configuration.
 - **Large Icon Support:** Show a custom large image alongside your status.
 
----
-
 ## Requirements
 
 - Node.js (Latest version recommended)
 - Discord installed and logged in
-
----
 
 ## Installation
 
