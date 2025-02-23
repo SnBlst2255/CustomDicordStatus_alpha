@@ -70,6 +70,9 @@ The tool uses config.json for customizable settings. Below is a sample configura
 - `interval`: Time in milliseconds between status updates.
 - `imageURL`: URL of the large image to display.
 
+> [!WARNING]
+> Do not set the interval to less than 10000ms, otherwise other users will see your status incorrectly.
+
 Each element of the array is a separate frame.
 
 ## Usage
